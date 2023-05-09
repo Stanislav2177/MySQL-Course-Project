@@ -25,3 +25,8 @@ The file allTasks.sql can be started in MySQL Workbench.
 7. Write a query that demonstrates both a JOIN and an aggregate function.
 8. Create a trigger of your choice.
 9. Create a procedure in which you demonstrate using a cursor
+
+# ER diagram generated from MySQL Workbench which to present the relationships between tables
+![ER Diagram](https://github.com/Stanislav2177/MySQL-Course-Project/assets/91600823/51e8e62d-e0db-4ad1-8ca3-e27b257f2e0c)
+
+
