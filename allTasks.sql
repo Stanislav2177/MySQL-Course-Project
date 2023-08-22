@@ -240,7 +240,7 @@ CREATE TABLE accounts (
 INSERT INTO accounts (first_name, last_name, email, role_user, password)
 VALUES ("Stanislav", "Yankov", "stanislav2177@gmail.com", "Admin", "34153");
 
--- Addition procedures 
+-- Additiononal procedures 
 DELIMITER //
 
 CREATE PROCEDURE GetSalesInfo()
@@ -299,7 +299,7 @@ BEGIN
 END //
 
 DELIMITER ;
-CALL GetSalesInfoFiltered(2); -- Replace 2 with the desired product_id
+CALL GetSalesInfoFiltered(2); 
 
 
 
