@@ -42,6 +42,7 @@ CREATE TABLE products (
   price DECIMAL(10,2) NOT NULL,
   expiry_date DATE NOT NULL,
   manufacturer_id INT NOT NULL,
+  quantity int NOT NULL,
   FOREIGN KEY (manufacturer_id) REFERENCES manufacturers(manufacturer_id)
 );
 
@@ -85,17 +86,19 @@ INSERT INTO employees (employee_name, position, department_id, manager_id, conta
 ("Kristian", "Loader", 3, 3, "088-535-3343"),
 ("Martin", "Heaver", 3, 3, "088-211-4311");
 
+
 INSERT INTO manufacturers (manufacturer_name, country, contact_info) VALUES 
 ('ABC Inc.', 'USA', 'info@abc.com'),
 ('XYZ Corp.', 'Japan', 'info@xyz.co.jp'),
 ('DEF Ltd.', 'Germany', 'info@def.de');
 
-INSERT INTO products (product_name, price, expiry_date, manufacturer_id) VALUES 
-('Product 1', 20.99, '2023-06-30', 1),
-('Product 2', 15.49, '2024-01-31', 2),
-('Product 3', 10.99, '2023-12-31', 1),
-('Product 4', 7.99, '2023-09-30', 3),
-('Product 5', 5.49, '2024-03-31', 2);
+
+INSERT INTO products (product_name, price, expiry_date, manufacturer_id, quantity) VALUES 
+('Product 1', 20.99, '2023-06-30', 1, 50),
+('Product 2', 15.49, '2024-01-31', 2, 50),
+('Product 3', 10.99, '2023-12-31', 1, 50),
+('Product 4', 7.99, '2023-09-30', 3, 50),
+('Product 5', 5.49, '2024-03-31', 2, 50);
 
 INSERT INTO sales (sale_date, sale_time, employee_id, product_id, quantity) VALUES 
 ('2023-04-01', '14:30:00', 1, 1, 5),
@@ -178,7 +181,7 @@ END;
 |
 DELIMITER ;
 
-INSERT INTO orders(order_date, sup22plier_id, product_id, quantity, expected_delivery_date) 
+INSERT INTO orders(order_date, supplier_id, product_id, quantity, expected_delivery_date) 
 VALUES("2021-05-06", 1, 3, 50, "2023-03-04");
 
 -- Task 9, Create a procedure that demonstrate the usage of cursor
@@ -223,3 +226,82 @@ DELIMITER ;
 
 CALL get_department_manager_names;
 
+DROP table accounts;
+
+CREATE TABLE accounts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  first_name VARCHAR(255),
+  last_name VARCHAR(255),
+  email VARCHAR(255) UNIQUE,
+  role_user ENUM('ADMIN', 'USER'),
+  password VARCHAR(255)
+);
+
+INSERT INTO accounts (first_name, last_name, email, role_user, password)
+VALUES ("Stanislav", "Yankov", "stanislav2177@gmail.com", "Admin", "34153");
+
+-- Addition procedures 
+DELIMITER //
+
+CREATE PROCEDURE GetSalesInfo()
+BEGIN
+    SELECT
+        p.product_id,
+        p.product_name,
+        p.price,
+        p.expiry_date,
+        p.quantity AS product_quantity,
+        s.sale_id,
+        s.sale_date,
+        s.sale_time,
+        s.quantity AS sale_quantity,
+        e.employee_id,
+        e.employee_name,
+        e.position,
+        m.manufacturer_id,
+        m.manufacturer_name,
+        m.country,
+        m.contact_info AS manufacturer_contact_info
+    FROM products p
+    INNER JOIN sales s ON p.product_id = s.product_id
+    INNER JOIN employees e ON s.employee_id = e.employee_id
+    INNER JOIN manufacturers m ON p.manufacturer_id = m.manufacturer_id;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE GetSalesInfoFiltered(IN product_id_param INT)
+BEGIN
+    SELECT
+        p.product_id,
+        p.product_name,
+        p.price,
+        p.expiry_date,
+        p.quantity AS product_quantity,
+        s.sale_id,
+        s.sale_date,
+        s.sale_time,
+        s.quantity AS sale_quantity,
+        e.employee_id,
+        e.employee_name,
+        e.position,
+        m.manufacturer_id,
+        m.manufacturer_name,
+        m.country,
+        m.contact_info AS manufacturer_contact_info
+    FROM products p
+    INNER JOIN sales s ON p.product_id = s.product_id
+    INNER JOIN employees e ON s.employee_id = e.employee_id
+    INNER JOIN manufacturers m ON p.manufacturer_id = m.manufacturer_id
+    WHERE p.product_id = product_id_param;
+END //
+
+DELIMITER ;
+CALL GetSalesInfoFiltered(2); -- Replace 2 with the desired product_id
+
+
+
+SELECT * FROM managers;
+select * FROM products;
