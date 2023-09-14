@@ -86,6 +86,8 @@ INSERT INTO employees (employee_name, position, department_id, manager_id, conta
 ("Kristian", "Loader", 3, 3, "088-535-3343"),
 ("Martin", "Heaver", 3, 3, "088-211-4311");
 
+SELECT * FROM employees;
+
 
 INSERT INTO manufacturers (manufacturer_name, country, contact_info) VALUES 
 ('ABC Inc.', 'USA', 'info@abc.com'),
@@ -240,8 +242,10 @@ CREATE TABLE accounts (
 INSERT INTO accounts (first_name, last_name, email, role_user, password)
 VALUES ("Stanislav", "Yankov", "stanislav2177@gmail.com", "Admin", "34153");
 
--- Additiononal procedures 
+-- Additiononalproducts procedures 
 DELIMITER //
+
+
 
 CREATE PROCEDURE GetSalesInfo()
 BEGIN
@@ -270,7 +274,10 @@ END //
 
 DELIMITER ;
 
+
 DELIMITER //
+
+
 
 CREATE PROCEDURE GetSalesInfoFiltered(IN product_id_param INT)
 BEGIN
@@ -286,11 +293,11 @@ BEGIN
         s.quantity AS sale_quantity,
         e.employee_id,
         e.employee_name,
-        e.position,
+        e.position AS employeePosition,
         m.manufacturer_id,
         m.manufacturer_name,
         m.country,
-        m.contact_info AS manufacturer_contact_info
+        m.contact_info AS contactInfo
     FROM products p
     INNER JOIN sales s ON p.product_id = s.product_id
     INNER JOIN employees e ON s.employee_id = e.employee_id
@@ -302,6 +309,14 @@ DELIMITER ;
 CALL GetSalesInfoFiltered(2); 
 
 
+-- Added User table to store users and their information which is required in login
 
-SELECT * FROM managers;
-select * FROM products;
+CREATE TABLE users(
+user_id bigint auto_increment primary KEY,
+date_of_birth date ,
+email varchar(255) ,
+first_name varchar(255), 
+last_name varchar(255) ,
+password varchar(255), 
+username varchar(255)
+);
